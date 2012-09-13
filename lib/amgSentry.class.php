@@ -22,6 +22,9 @@ class amgSentry extends Raven_Client {
 	}
 
 	public function capture($data, $stack){
+		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
+			return true;
+		}
 		if (!isset($data['logger'])) {
 			if (null !== self::$_logger) {
 				$data['logger'] = self::$_logger;

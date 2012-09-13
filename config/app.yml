@@ -1,4 +1,5 @@
 #all:
 #  amg_sentry:
+#    enabled: false
 #    dsn: ''
 #    logger: ''
