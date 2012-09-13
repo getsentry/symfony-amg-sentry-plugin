@@ -1,3 +1,8 @@
+# SUBLIME TEXT 2
+*.sublime-project
+*.sublime-workspace
+
+# SYMFONY
 cache/*
 log/*
 web/uploads/*

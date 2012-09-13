@@ -1,0 +1,4 @@
+#all:
+#  amg_sentry:
+#    dsn: ''
+#    logger: ''
