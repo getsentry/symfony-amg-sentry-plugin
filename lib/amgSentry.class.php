@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @author Jean Roussel <jroussel@amg-dev.fr>
+ * @copyright AMG Développement | Groupe GPdis
+ *
+ */
 class amgSentry extends Raven_Client {
 
 	static protected $_instance = null;
