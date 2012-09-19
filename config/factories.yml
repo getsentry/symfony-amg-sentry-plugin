@@ -1,0 +1,8 @@
+# all:
+#   logger:
+#     param:
+#       loggers:
+#         amg_sentry_logger:
+#           class: amgSentryLogger
+#           param:
+#             level: notice

@@ -1,22 +1,25 @@
 <?php
 
 /**
+ * amgSentry allows you to send message and exception to Sentry.
+ * 
  * @author Jean Roussel <jroussel@amg-dev.fr>
  * @copyright AMG Développement | Groupe GPdis
  *
  */
 class amgSentry extends Raven_Client {
 
-	const DEBUG = 'debug';
-    const INFO = 'info';
-    const WARN = 'warning';
-    const WARNING = 'warning';
-    const ERROR = 'error';
-    const FATAL = 'fatal';
+	static protected
+		$_instance = null,
+		$_logger = null;
 
-	static protected $_instance = null;
+	/**
+	* Retrieves the singleton instance of this class.
+	*
+	* @return amgSentry A amgSentry implementation instance.
+	*/
 	static public function getInstance(){
-		if (null === self::$_instance) {
+		if (!isset(self::$_instance)) {
 			if (!sfConfig::get('app_amg_sentry_dsn')) {
 				throw new Exception('Please configure amgSentryPlugin in your app.yml (use model in "amgSentryPlugin/config/app.yml")');
 			}
@@ -25,14 +28,34 @@ class amgSentry extends Raven_Client {
 		return self::$_instance;
 	}
 
+	/**
+	* Send a message to Sentry.
+	*
+	* @param string $title Message title
+	* @param string $description Message description
+	* @param string $level Message level
+	*
+	* @return integer Sentry event ID 
+	*/
 	static public function sendMessage($title, $description = '', $level = self::INFO){
 		return self::getInstance()->captureMessage($title, array('description' => $description), $level);
 	}
 
+	/**
+	* Send an exception to Sentry.
+	*
+	* @param Exception $exception Exception
+	* @param string $description Exception description
+	*
+	* @return integer Sentry event ID 
+	*/
 	static public function sendException($exception, $description = ''){
 		return self::getInstance()->captureException($exception, $description);
 	}
 
+	/**
+    * Log a message to sentry
+    */
 	public function capture($data, $stack){
 		if (!empty($data['sentry.interfaces.Message']['params']['description'])) {
 			$data['culprit'] = $data['message'];
@@ -58,10 +81,17 @@ class amgSentry extends Raven_Client {
 		return parent::capture($data, $stack);
 	}
 
-	static protected $_logger = null;
+	/**
+	* Set Sentry logger.
+	*
+	* @param string $logger Logger
+	*/
 	static public function setLogger($logger){
 		self::$_logger = $logger;
 	}
+	/**
+	* Reset Sentry logger.
+	*/
 	static public function resetLogger(){
 		self::$_logger = null;
 	}
