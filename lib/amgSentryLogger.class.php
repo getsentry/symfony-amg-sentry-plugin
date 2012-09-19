@@ -26,7 +26,7 @@ class amgSentryLogger extends sfLogger {
 	*
 	* @param integer $priority Logger priority
 	*
-	* @return integer Sentry level
+	* @return string Sentry level
 	*/
 	protected function _getSentryLevelFromLoggerPriority($priority){
 		switch ($priority) {

@@ -56,7 +56,7 @@ class ProjectConfiguration extends sfProjectConfiguration
 
 ### Configure the plugin in `config/app.yml` (project and/or application level)
 
-```yml
+```yaml
 prod:
   amg_sentry:
     enabled: true
@@ -66,14 +66,14 @@ prod:
 
 ### (Optional) Enable the helper in `config/settings.yml` (application level)
 
-```yml
+```yaml
 .settings:
   standard_helpers: [default, Sentry, ...]
 ```
 
 ### (Optional) Configure the symfony logger in `config/factories.yml` (project and/or application level)
 
-```yml
+```yaml
 prod:
   logger:
     param:

@@ -57,6 +57,9 @@ class amgSentry extends Raven_Client {
     * Log a message to sentry
     */
 	public function capture($data, $stack){
+		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
+			return true;
+		}
 		if (!empty($data['sentry.interfaces.Message']['params']['description'])) {
 			$data['culprit'] = $data['message'];
 			$data['message'] = $data['sentry.interfaces.Message']['params']['description'];
@@ -65,9 +68,6 @@ class amgSentry extends Raven_Client {
 		if (!empty($data['sentry.interfaces.Exception']['value'])) {
 			$data['message'] = $data['culprit'];
 			$data['culprit'] = $data['sentry.interfaces.Exception']['value'];
-		}
-		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
-			return true;
 		}
 		if (!isset($data['logger'])) {
 			if (null !== self::$_logger) {
