@@ -96,25 +96,25 @@ $ symfony cc
 
 ```php
 // send a message with no description and information level (by default)
-amgSentry::getInstance()->sendMessage('Message title');
+amgSentry::sendMessage('Message title');
 
 // send a debug message
-amgSentry::getInstance()->sendMessage('Debug message title', 'Debug message description', amgSentry::DEBUG);
+amgSentry::sendMessage('Debug message title', 'Debug message description', amgSentry::DEBUG);
 
 // send a warning message
-amgSentry::getInstance()->sendMessage('Warning message title', 'Warning message description', amgSentry::WARNING);
+amgSentry::sendMessage('Warning message title', 'Warning message description', amgSentry::WARNING);
 
 // send an error message
-amgSentry::getInstance()->sendMessage('Error message title', 'Error message description', amgSentry::ERROR);
+amgSentry::sendMessage('Error message title', 'Error message description', amgSentry::ERROR);
 
 // send an exception
-amgSentry::getInstance()->sendException(new Exception('Exception message'), 'Exception description');
+amgSentry::sendException(new Exception('Exception message'), 'Exception description');
 
 // set logger
-amgSentry::getInstance()->setLogger('new-logger');
+amgSentry::setLogger('new-logger');
 
 // reset logger
-amgSentry::getInstance()->resetLogger();
+amgSentry::resetLogger();
 ```
 
 ### SentryHelper

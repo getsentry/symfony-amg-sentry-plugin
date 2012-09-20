@@ -18,7 +18,7 @@ class amgSentryLogger extends sfLogger {
 	* @see sfLogger::doLog
 	*/
 	protected function doLog($message, $priority){
-		amgSentry::getInstance()->sendMessage($message, '', $this->_getSentryLevelFromLoggerPriority($priority));
+		amgSentry::sendMessage($message, '', $this->_getSentryLevelFromLoggerPriority($priority));
 	}
 
 	/**

@@ -10,7 +10,7 @@
 * @return integer Sentry event ID 
 */
 function sentry_send_message($title, $description = '', $level = self::INFO){
-	return amgSentry::getInstance()->sendMessage($title, $description, $level);
+	return amgSentry::sendMessage($title, $description, $level);
 }
 
 /**
@@ -22,7 +22,7 @@ function sentry_send_message($title, $description = '', $level = self::INFO){
 * @return integer Sentry event ID 
 */
 function sentry_send_exception($exception, $description = ''){
-	return amgSentry::getInstance()->sendException($exception, $description);
+	return amgSentry::sendException($exception, $description);
 }
 
 /**
@@ -31,12 +31,12 @@ function sentry_send_exception($exception, $description = ''){
 * @param string $logger Logger
 */
 function sentry_set_logger($logger){
-	amgSentry::getInstance()->setLogger($logger);
+	amgSentry::setLogger($logger);
 }
 
 /**
 * Reset Sentry logger.
 */
 function sentry_reset_logger(){
-	amgSentry::getInstance()->resetLogger();
+	amgSentry::resetLogger();
 }
