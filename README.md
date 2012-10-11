@@ -28,7 +28,7 @@ $ git submodule add github.com:amg-dev/symfony-amg-sentry-plugin.git plugins/amg
 
 ### Via zip archive
 
-[Download](https://github.com/amg-dev/symfony-amg-sentry-plugin.git/zipball/master) and extract zip archive.
+[Download](https://github.com/amg-dev/symfony-amg-sentry-plugin/zipball/master) and extract zip archive.
 
 ### Via symfony package
 
