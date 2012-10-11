@@ -1,4 +1,4 @@
-# amgSentryPlugin
+# symfony's amgSentryPlugin
 
 The `amgSentryPlugin` is a symfony 1.4 plugin for Sentry interface.
 
@@ -17,18 +17,18 @@ In the `plugins` folder of your symfony project.
 ### Via git clone
 
 ```
-$ git clone git@github.com:amg-dev/amgSentryPlugin.git plugins/amgSentryPlugin
+$ git clone git@github.com:amg-dev/symfony-amg-sentry-plugin.git plugins/amgSentryPlugin
 ```
 
 ### Via git submodule
 
 ```
-$ git submodule add github.com:amg-dev/amgSentryPlugin.git plugins/amgSentryPlugin
+$ git submodule add github.com:amg-dev/symfony-amg-sentry-plugin.git plugins/amgSentryPlugin
 ```
 
 ### Via zip archive
 
-[Download](https://github.com/amg-dev/amgSentryPlugin/zipball/master) and extract zip archive.
+[Download](https://github.com/amg-dev/symfony-amg-sentry-plugin.git/zipball/master) and extract zip archive.
 
 ### Via symfony package
 
