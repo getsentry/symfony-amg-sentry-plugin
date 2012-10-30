@@ -42,15 +42,34 @@ class Raven_Client
         }
         $options = array_merge($options_or_dsn, $options);
 
-        $this->servers = (!empty($options['servers']) ? $options['servers'] : null);
-        $this->secret_key = (!empty($options['secret_key']) ? $options['secret_key'] : null);
-        $this->public_key = (!empty($options['public_key']) ? $options['public_key'] : null);
-        $this->project = (isset($options['project']) ? $options['project'] : 1);
-        $this->auto_log_stacks = (isset($options['auto_log_stacks']) ? $options['auto_log_stacks'] : false);
-        $this->name = (!empty($options['name']) ? $options['name'] : Raven_Compat::gethostname());
-        $this->site = (!empty($options['site']) ? $options['site'] : $this->_server_variable('SERVER_NAME'));
+        $this->servers = Raven_Util::get($options, 'servers');
+        $this->secret_key = Raven_Util::get($options, 'secret_key');
+        $this->public_key = Raven_Util::get($options, 'public_key');
+        $this->project = Raven_Util::get($options, 'project', 1);
+        $this->auto_log_stacks = (bool)Raven_Util::get($options, 'auto_log_stacks', false);
+        $this->name = Raven_Util::get($options, 'name', Raven_Compat::gethostname());
+        $this->site = Raven_Util::get($options, 'site', $this->_server_variable('SERVER_NAME'));
+        $this->tags = Raven_Util::get($options, 'tags', array());
+        $this->trace = (bool)Raven_Util::get($options, 'trace', true);
+
+        // XXX: Signing is disabled by default as it is no longer required by modern versions of Sentrys
+        $this->signing = (bool)Raven_Util::get($options, 'signing', false);
+
+        $this->processors = array();
+        foreach (Raven_util::get($options, 'processors', $this->getDefaultProcessors()) as $processor) {
+            $this->processors[] = new $processor($this);
+        }
+
         $this->_lasterror = null;
     }
+
+    public static function getDefaultProcessors()
+    {
+        return array(
+            'Raven_SanitizeDataProcessor',
+        );        
+    }
+
 
     /**
      * Parses a Raven-compatible DSN and returns an array of its values.
@@ -60,7 +79,7 @@ class Raven_Client
         $url = parse_url($dsn);
         $scheme = (isset($url['scheme']) ? $url['scheme'] : '');
         if (!in_array($scheme, array('http', 'https', 'udp'))) {
-            throw new InvalidArgumentException('Unsupported Sentry DSN scheme: ' . $scheme);
+            throw new InvalidArgumentException('Unsupported Sentry DSN scheme: ' . (!empty($scheme) ? $scheme : '<not set>'));
         }
         $netloc = (isset($url['host']) ? $url['host'] : null);
         $netloc.= (isset($url['port']) ? ':'.$url['port'] : null);
@@ -91,6 +110,11 @@ class Raven_Client
             'public_key' => $username,
             'secret_key' => $password,
         );
+    }
+
+    public function getLastError()
+    {
+        return $this->_lasterror;
     }
 
     /**
@@ -159,9 +183,9 @@ class Raven_Client
         );
 
         $data['sentry.interfaces.Exception'] = array(
-                'value' => $exc_message,
-                'type' => $exception->getCode(),
-                'module' => $exception->getFile() .':'. $exception->getLine(),
+            'value' => $exc_message,
+            'type' => get_class($exception),
+            'module' => $exception->getFile() .':'. $exception->getLine(),
         );
 
         if ($culprit){
@@ -185,6 +209,28 @@ class Raven_Client
         return $this->capture($data, $trace);
     }
 
+    private function is_http_request()
+    {
+        // The function getallheaders() is only available when running in a
+        // web-request. The function is missing when run from the commandline..
+        return function_exists('getallheaders');
+    }
+
+    private function get_http_data()
+    {
+        return array(
+            'sentry.interfaces.Http' => array(
+                'method' => $this->_server_variable('REQUEST_METHOD'),
+                'url' => $this->get_current_url(),
+                'query_string' => $this->_server_variable('QUERY_STRNG'),
+                'data' => $_POST,
+                'cookies' => $_COOKIE,
+                'headers' => getallheaders(),
+                'env' => $_SERVER,
+            )
+        );
+    }
+
     public function capture($data, $stack)
     {
         $event_id = $this->uuid4();
@@ -192,28 +238,16 @@ class Raven_Client
         if (!isset($data['timestamp'])) $data['timestamp'] = gmdate('Y-m-d\TH:i:s\Z');
         if (!isset($data['level'])) $data['level'] = self::ERROR;
 
-        // The function getallheaders() is only available when running in a
-        // web-request. The function is missing when run from the commandline..
-        $headers = array();
-        if (function_exists('getallheaders')) {
-            $headers = getallheaders();
-        }
-
         $data = array_merge($data, array(
             'server_name' => $this->name,
             'event_id' => $event_id,
             'project' => $this->project,
             'site' => $this->site,
-            'sentry.interfaces.Http' => array(
-                'method' => $this->_server_variable('REQUEST_METHOD'),
-                'url' => $this->get_current_url(),
-                'query_string' => $this->_server_variable('QUERY_STRNG'),
-                'data' => $_POST,
-                'cookies' => $_COOKIE,
-                'headers' => $headers,
-                'env' => $_SERVER,
-            )
         ));
+
+        if ($this->is_http_request()) {
+            $data = array_merge($data, $this->get_http_data());
+        }
 
         if ((!$stack && $this->auto_log_stacks) || $stack === True) {
             $stack = debug_backtrace();
@@ -223,30 +257,34 @@ class Raven_Client
         }
 
         if (!empty($stack)) {
-            /**
-             * PHP's way of storing backstacks seems bass-ackwards to me
-             * 'function' is not the function you're in; it's any function being
-             * called, so we have to shift 'function' down by 1. Ugh.
-             */
-            for ($i = 0; $i < count($stack) - 1; $i++) {
-                $stack[$i]['function'] = $stack[$i + 1]['function'];
-            }
-            $stack[count($stack) - 1]['function'] = null;
-
             if (!isset($data['sentry.interfaces.Stacktrace'])) {
                 $data['sentry.interfaces.Stacktrace'] = array(
-                    'frames' => Raven_Stacktrace::get_stack_info($stack)
+                    'frames' => Raven_Stacktrace::get_stack_info($stack, $this->trace),
                 );
             }
         }
 
-        if (function_exists('mb_convert_encoding')) {
-            $data = $this->remove_invalid_utf8($data);
-        }
+        // TODO: allow tags to be specified per event
+        $data['tags'] = $this->tags;
+
+        $this->sanitize($data);
+        $this->process($data);
 
         $this->send($data);
 
         return $event_id;
+    }
+
+    public function sanitize(&$data)
+    {
+        $data = Raven_Serializer::serialize($data);
+    }
+
+    public function process(&$data)
+    {
+        foreach ($this->processors as $processor) {
+            $processor->process($data);
+        }
     }
 
     public function send($data)
@@ -256,8 +294,12 @@ class Raven_Client
         foreach($this->servers as $url) {
             $client_string = 'raven-php/' . self::VERSION;
             $timestamp = microtime(true);
-            $signature = $this->get_signature(
-                $message, $timestamp, $this->secret_key);
+            if ($this->signing) {
+                $signature = $this->get_signature(
+                    $message, $timestamp, $this->secret_key);
+            } else {
+                $signature = null;
+            }
 
             $headers = array(
                 'User-Agent' => $client_string,
@@ -317,6 +359,8 @@ class Raven_Client
         if (!$success) {
             // It'd be nice just to raise an exception here, but it's not very PHP-like
             $this->_lasterror = $ret;
+        } else {
+            $this->_lasterror = null;
         }
         return $success;
     }
@@ -334,13 +378,15 @@ class Raven_Client
     {
         $header = array(
             sprintf("sentry_timestamp=%F", $timestamp),
-            "sentry_signature={$signature}",
             "sentry_client={$client}",
             "sentry_version=2.0",
         );
+        if (!empty($signature)) {
+            $header[] = "sentry_signature={$signature}";
+        }
 
         if ($api_key) {
-            array_push($header, "sentry_key={$api_key}");
+            $header[] = "sentry_key={$api_key}";
         }
 
         return sprintf('Sentry %s', implode(', ', $header));
@@ -380,7 +426,7 @@ class Raven_Client
     {
         // When running from commandline the REQUEST_URI is missing.
         if ($this->_server_variable('REQUEST_URI') === '') {
-            return '';
+            return null;
         }
 
         $schema = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
@@ -395,23 +441,4 @@ class Raven_Client
         }
         return '';
     }
-
-    private function remove_invalid_utf8($data)
-    {
-        foreach ($data as $key => $value) {
-            if (is_string($key)) {
-                $key = mb_convert_encoding($key, 'UTF-8', 'UTF-8');
-            }
-            if (is_string($value)) {
-                $value = mb_convert_encoding($value, 'UTF-8', 'UTF-8');
-            }
-            if (is_array($value)) {
-                $value = $this->remove_invalid_utf8($value);
-            }
-            $data[$key] = $value;
-        }
-
-        return $data;
-    }
-
 }
