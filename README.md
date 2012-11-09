@@ -6,8 +6,8 @@ This plugin is based on Raven client library [raven-php](https://github.com/gets
 
 ## Requirements
 
-* PHP >= 5.2
-* symfony >= 1.4
+* PHP ≥ 5.2
+* symfony ≥ 1.4
 * Sentry instance
 
 ## Installation
@@ -32,7 +32,7 @@ $ git submodule add github.com:amg-dev/symfony-amg-sentry-plugin.git plugins/amg
 
 ### Via symfony package
 
-Coming soon...
+*Coming soon...*
 
 ## Configuration
 
