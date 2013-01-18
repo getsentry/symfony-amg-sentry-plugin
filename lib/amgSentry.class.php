@@ -2,7 +2,7 @@
 
 /**
  * amgSentry allows you to send message and exception to Sentry.
- * 
+ *
  * @author Jean Roussel <jroussel@amg-dev.fr>
  * @copyright AMG Développement | Groupe GPdis
  *
@@ -35,9 +35,12 @@ class amgSentry extends Raven_Client {
 	* @param string $description Message description
 	* @param string $level Message level
 	*
-	* @return integer Sentry event ID 
+	* @return integer Sentry event ID
 	*/
 	static public function sendMessage($title, $description = '', $level = self::INFO){
+		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
+			return true;
+		}
 		return self::getInstance()->captureMessage($title, array('description' => $description), $level);
 	}
 
@@ -47,9 +50,12 @@ class amgSentry extends Raven_Client {
 	* @param Exception $exception Exception
 	* @param string $description Exception description
 	*
-	* @return integer Sentry event ID 
+	* @return integer Sentry event ID
 	*/
 	static public function sendException($exception, $description = ''){
+		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
+			return true;
+		}
 		return self::getInstance()->captureException($exception, $description);
 	}
 
