@@ -3,6 +3,9 @@
     "type": "symfony1-plugin",
     "description": "symfony 1.x plugin for Sentry.",
     "keywords": ["symfony", "logger", "sentry"],
-    "homepage": "https://github.com/amg-dev/symfony-amg-sentry-plugin"
+    "homepage": "https://github.com/amg-dev/symfony-amg-sentry-plugin",
+    "require": {
+        "composer/installers": "*"
+    }
 }
 
