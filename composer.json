@@ -1,5 +1,5 @@
 {
-    "name": "sentry/sf-amg-sentry-plugin",
+    "name": "sentry/amg-sentry-plugin",
     "type": "symfony1-plugin",
     "description": "symfony 1.x plugin for Sentry.",
     "keywords": ["symfony", "logger", "sentry"],
