@@ -58,7 +58,7 @@ class amgSentryErrorNotifierErrorHandler
 
 		// there would be more warning codes but they are not caught by set_error_handler
 		// but by register_shutdown_function
-		$warningsCodes = array(E_NOTICE, E_USER_WARNING, E_USER_NOTICE,E_STRICT);
+		$warningsCodes = array(E_NOTICE, E_USER_WARNING, E_USER_NOTICE, E_STRICT);
 
 		// E_DEPRECATED, E_USER_DEPRECATED have been introduced in PHP 5.3
 		if (defined('E_DEPRECATED')) {
@@ -72,7 +72,7 @@ class amgSentryErrorNotifierErrorHandler
 			return false;
 		}
 
-		amgSentryErrorNotifier::notifyException(new ErrorException($errstr, 0, $errno, $errfile, $errline));
+		amgSentry::notifyException(new ErrorException($errstr, 0, $errno, $errfile, $errline));
 
 		return false; // in order not to bypass the standard PHP error handler
 	}
@@ -100,13 +100,13 @@ class amgSentryErrorNotifierErrorHandler
 		}
 
 		if (in_array($lastError['type'], $errors)) {
-			amgSentryErrorNotifier::notifyException(new ErrorException(@$lastError['message'], @$lastError['type'], @$lastError['type'], @$lastError['file'], @$lastError['line']));
+			amgSentry::notifyException(new ErrorException(@$lastError['message'], @$lastError['type'], @$lastError['type'], @$lastError['file'], @$lastError['line']));
 		}
 	}
 
 	public static function handleException($e)
 	{
-		amgSentryErrorNotifier::notifyException($e);
+		amgSentry::notifyException($e);
 	}
 
 	/**

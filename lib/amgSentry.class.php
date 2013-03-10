@@ -60,12 +60,13 @@ class amgSentry extends Raven_Client {
 	}
 
 	/**
-    * Log a message to sentry
-    */
+	 * Log a message to sentry
+	 */
 	public function capture($data, $stack){
 		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
 			return true;
 		}
+		$data['culprit'] = null;
 		if (!empty($data['sentry.interfaces.Message']['params']['description'])) {
 			$data['culprit'] = $data['message'];
 			$data['message'] = $data['sentry.interfaces.Message']['params']['description'];
