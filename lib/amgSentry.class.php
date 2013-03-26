@@ -62,7 +62,7 @@ class amgSentry extends Raven_Client {
 	/**
 	 * Log a message to sentry
 	 */
-	public function capture($data, $stack){
+	public function capture($data, $stack, $vars = null){
 		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
 			return true;
 		}
@@ -85,7 +85,7 @@ class amgSentry extends Raven_Client {
 				$data['logger'] = sfConfig::get('sf_app');
 			}
 		}
-		return parent::capture($data, $stack);
+		return parent::capture($data, $stack, $vars);
 	}
 
 	/**
