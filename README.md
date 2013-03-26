@@ -14,16 +14,61 @@ This plugin is based on Raven client library [raven-php](https://github.com/gets
 
 In the `plugins` folder of your symfony project.
 
+### The Composer way
+
+*Work in progress!...*
+
+Add the require to your composer.json. It's oddly named but like this Composer's symfony1 installer camelcases it correctly. Composer will install it into your project's plugins directory automatically, and add the requirements.
+
+```
+{
+    "config": {
+        "vendor-dir": "lib/vendor"
+    },
+    "require": {
+        "amg-dev/amg-sentry-plugin": "dev-master"
+    }
+}
+```
+
+Of course, don't forget to add Composer's autoloader to your ProjectConfiguration:
+
+```
+// config/ProjectConfiguration.class.php
+
+require __DIR__ .'/../lib/vendor/autoload.php';
+
+require_once dirname(__FILE__) .'/../lib/vendor/symfony/lib/autoload/sfCoreAutoload.class.php';
+sfCoreAutoload::register();
+
+class ProjectConfiguration extends sfProjectConfiguration
+{
+    public function setup()
+    {
+        $this->enablePlugins(array(
+            'amgSentryPlugin',
+            ...
+        ));
+
+        // mandatory because of the Composer vendor directory naming scheme
+        sfConfig::set('sf_raven_path', sfConfig::get('sf_lib_dir') .'/vendor/raven/raven');
+    }
+}
+```
+
 ### Via git clone
 
 ```
 $ git clone git@github.com:amg-dev/symfony-amg-sentry-plugin.git plugins/amgSentryPlugin
+$ cd plugins/amgSentryPlugin
+$ git submodule update --init
 ```
 
 ### Via git submodule
 
 ```
 $ git submodule add github.com:amg-dev/symfony-amg-sentry-plugin.git plugins/amgSentryPlugin
+$ git submodule update --init --recursive
 ```
 
 ### Via zip archive

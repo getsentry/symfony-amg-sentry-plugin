@@ -1,0 +1,12 @@
+{
+    "name": "amg-dev/amg-sentry-plugin",
+    "type": "symfony1-plugin",
+    "description": "symfony 1.x plugin for Sentry.",
+    "keywords": ["symfony", "logger", "sentry"],
+    "homepage": "https://github.com/amg-dev/symfony-amg-sentry-plugin",
+    "require": {
+        "composer/installers": "*",
+        "raven/raven": ">=0.2.0"
+    }
+}
+
