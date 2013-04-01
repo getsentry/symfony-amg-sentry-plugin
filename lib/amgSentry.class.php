@@ -60,12 +60,13 @@ class amgSentry extends Raven_Client {
 	}
 
 	/**
-    * Log a message to sentry
-    */
-	public function capture($data, $stack){
+	 * Log a message to sentry
+	 */
+	public function capture($data, $stack, $vars = null){
 		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
 			return true;
 		}
+		$data['culprit'] = null;
 		if (!empty($data['sentry.interfaces.Message']['params']['description'])) {
 			$data['culprit'] = $data['message'];
 			$data['message'] = $data['sentry.interfaces.Message']['params']['description'];
@@ -84,7 +85,7 @@ class amgSentry extends Raven_Client {
 				$data['logger'] = sfConfig::get('sf_app');
 			}
 		}
-		return parent::capture($data, $stack);
+		return parent::capture($data, $stack, $vars);
 	}
 
 	/**
@@ -102,4 +103,32 @@ class amgSentry extends Raven_Client {
 		self::$_logger = null;
 	}
 
+	static public function notify(sfEvent $event)
+	{
+		$e = $event->getSubject();
+		if ($e instanceof Exception) {
+			return self::notifyException($e);
+		}
+		return;
+	}
+
+	static public function notify404(sfEvent $event)
+	{
+		$e = $event->getSubject();
+		if ($e instanceof Exception) {
+			return self::notifyException($e);
+		} else {
+			$uri = sfContext::getInstance()->getRequest()->getUri();
+			return self::notifyException(new sfError404Exception("Page not found [404][uri: $uri]"));
+		}
+	}
+
+	static public function notifyException($exception)
+	{
+		// it's not an error.
+		if ($exception instanceof sfStopException) {
+			return;
+		}
+		self::sendException($exception);
+	}
 }
