@@ -16,8 +16,6 @@ In the `plugins` folder of your symfony project.
 
 ### The Composer way
 
-*Work in progress!...*
-
 Add the require to your composer.json. It's oddly named but like this Composer's symfony1 installer camelcases it correctly. Composer will install it into your project's plugins directory automatically, and add the requirements.
 
 ```
