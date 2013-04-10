@@ -16,8 +16,6 @@ In the `plugins` folder of your symfony project.
 
 ### The Composer way
 
-*Work in progress!...*
-
 Add the require to your composer.json. It's oddly named but like this Composer's symfony1 installer camelcases it correctly. Composer will install it into your project's plugins directory automatically, and add the requirements.
 
 ```
@@ -107,7 +105,15 @@ prod:
     enabled: true
     dsn: 'http://public:secret@sentry.example.com:9000/[PROJECT_ID]'
     logger: 'custom-logger-name'
+    reportPHPErrors: true
+    reportPHPWarnings: false
+    report404: false
 ```
+
+ * `dsn` - If it is possible for sites with high traffic use UDP protocol.
+ * `reportPHPErrors` - If true, it sends a notification when there is a exception.
+ * `reportPHPWarnings` - If true, it sends a notification when there is a warning.
+ * `report404` - If true, it sends a notification when a user lands on a page 404. It should be used only for the duration of the study, the risk is that web crawlers will produce a lot of notifications.
 
 ### (Optional) Enable the helper in `config/settings.yml` (application level)
 
