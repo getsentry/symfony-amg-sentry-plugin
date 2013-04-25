@@ -1,9 +1,20 @@
 {
     "name": "amg-dev/amg-sentry-plugin",
     "type": "symfony1-plugin",
-    "description": "symfony 1.x plugin for Sentry.",
+    "description": "Symfony 1.x plugin for Sentry.",
     "keywords": ["symfony", "logger", "sentry"],
     "homepage": "https://github.com/amg-dev/symfony-amg-sentry-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicolas Dubois",
+            "email": "nicolas.c.dubois@gmail.com"
+        },
+        {
+            "name": "Jean Roussel",
+            "email": "contact@jean-roussel.fr"
+        }
+    ],
     "require": {
         "composer/installers": "*",
         "raven/raven": ">=0.2.0"
