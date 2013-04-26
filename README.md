@@ -2,7 +2,7 @@
 
 The `amgSentryPlugin` is a symfony 1.4 plugin for Sentry interface.
 
-This plugin is based on Raven client library [raven-php](https://github.com/getsentry/raven-php) 
+This plugin is based on Raven client library [raven-php](https://github.com/getsentry/raven-php).
 
 ## Requirements
 
@@ -18,7 +18,7 @@ In the `plugins` folder of your symfony project.
 
 Add the require to your composer.json. It's oddly named but like this Composer's symfony1 installer camelcases it correctly. Composer will install it into your project's plugins directory automatically, and add the requirements.
 
-```
+```json
 {
     "config": {
         "vendor-dir": "lib/vendor"
@@ -31,7 +31,7 @@ Add the require to your composer.json. It's oddly named but like this Composer's
 
 Of course, don't forget to add Composer's autoloader to your ProjectConfiguration:
 
-```
+```php
 // config/ProjectConfiguration.class.php
 
 require __DIR__ .'/../lib/vendor/autoload.php';
@@ -72,10 +72,6 @@ $ git submodule update --init --recursive
 ### Via zip archive
 
 [Download](https://github.com/amg-dev/symfony-amg-sentry-plugin/archive/master.zip) and extract zip archive.
-
-### Via symfony package
-
-*Coming soon...*
 
 ## Configuration
 
@@ -134,6 +130,11 @@ prod:
           param:
             level: warning
 ```
+
+Additional docs about logging:
+
+* [The factories.yml Configuration File (official doc)](http://symfony.com/legacy/doc/reference/1_4/en/05-Factories)
+* [Enable logging in the production environment](http://symfony-blog.driebit.nl/2010/11/enable-logging-in-the-production-environment/)
 
 ### Clear the cache
 
@@ -207,6 +208,7 @@ sfContext::getInstance()->getLogger()->err('Error message');
 
 * Nicolas Dubois <nicolas.c.dubois@gmail.com>
 * Jean Roussel <contact@jean-roussel.fr>
+* Arkadiusz Tułodziecki <atulodzi@gmail.com>
 
 ### vendor/raven-php
 
