@@ -1,5 +1,13 @@
+Original authors:
+
 Nicolas Dubois <nicolas.c.dubois@gmail.com>
 Jean Roussel <contact@jean-roussel.fr>
+
+Main contributor:
+
+Arkadiusz Tułodziecki <atulodzi@gmail.com>
+
+https://github.com/amg-dev/symfony-amg-sentry-plugin/contributors
 
 The Raven PHP client was originally written by Michael van Tellingen
 and is maintained by the Sentry Team.
