@@ -54,6 +54,9 @@ class amgSentryErrorNotifierErrorHandler
 	 */
 	public static function handlePhpError($errno, $errstr, $errfile, $errline)
 	{
+		if (error_reporting() === 0) {
+			return false;
+		}
 		$reportPHPWarnings = sfConfig::get('app_amg_sentry_reportPHPWarnings');
 
 		// there would be more warning codes but they are not caught by set_error_handler
