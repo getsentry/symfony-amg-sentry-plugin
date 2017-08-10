@@ -23,7 +23,7 @@ class amgSentry extends Raven_Client {
 			if (!sfConfig::get('app_amg_sentry_dsn')) {
 				throw new Exception('Please configure amgSentryPlugin in your app.yml (use model in "amgSentryPlugin/config/app.yml")');
 			}
-			self::$_instance = new amgSentry(sfConfig::get('app_amg_sentry_dsn'));
+			self::$_instance = new amgSentry(sfConfig::get('app_amg_sentry_dsn'), array('release' => sfConfig::get('app_amg_sentry_release')));
 		}
 		return self::$_instance;
 	}
@@ -65,6 +65,9 @@ class amgSentry extends Raven_Client {
 	public function capture($data, $stack, $vars = null){
 		if (!sfConfig::get('app_amg_sentry_enabled', false)) {
 			return true;
+		}
+		if(sfConfig::get('app_amg_sentry_release', null)) {
+			$data['release'] = sfConfig::get('app_amg_sentry_release', null);
 		}
 		$data['culprit'] = null;
 		if (!empty($data['sentry.interfaces.Message']['params']['description'])) {

@@ -3,6 +3,7 @@
 #    enabled: false
 #    dsn: ''
 #    logger: ''
+#    release:    ~                # Release or tag name
 #    reportPHPErrors: false       # This will let you be notified not only of
 #                                 # Symfony exceptions, but also PHP errors.
 #
