@@ -49,7 +49,7 @@ class ProjectConfiguration extends sfProjectConfiguration
         ));
 
         // mandatory because of the Composer vendor directory naming scheme
-        sfConfig::set('sf_sentry_path', sfConfig::get('sf_lib_dir') . '/vendor/sentry');
+        sfConfig::set('sf_sentry_path', sfConfig::get('sf_lib_dir') . '/vendor/sentry/sentry');
     }
 }
 ```
