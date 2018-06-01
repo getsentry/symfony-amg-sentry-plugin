@@ -1,8 +1,8 @@
 # symfony's amgSentryPlugin
 
-The `amgSentryPlugin` is a symfony 1.4 plugin for Sentry interface.
+The `amgSentryPlugin` is a Symfony 1.4 plugin for the Sentry PHP client.
 
-This plugin is based on Raven client library [raven-php](https://github.com/getsentry/raven-php).
+This plugin is based on the Sentry PHP client library [sentry-php](https://github.com/getsentry/sentry-php).
 
 ## Requirements
 
@@ -49,7 +49,7 @@ class ProjectConfiguration extends sfProjectConfiguration
         ));
 
         // mandatory because of the Composer vendor directory naming scheme
-        sfConfig::set('sf_raven_path', sfConfig::get('sf_lib_dir') .'/vendor/raven/raven');
+        sfConfig::set('sf_sentry_path', sfConfig::get('sf_lib_dir') . '/vendor/sentry');
     }
 }
 ```
@@ -212,7 +212,6 @@ sfContext::getInstance()->getLogger()->err('Error message');
 
 ### vendor/raven-php
 
-The Raven PHP client was originally written by Michael van Tellingen
-and is maintained by the Sentry Team.
+The Sentry PHP client is maintained by the Sentry Team.
 
-http://github.com/getsentry/raven-php/contributors
+http://github.com/getsentry/sentry-php

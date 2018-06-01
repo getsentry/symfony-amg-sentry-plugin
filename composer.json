@@ -17,7 +17,7 @@
     ],
     "require": {
         "composer/installers": "*",
-        "raven/raven": ">=0.2.0"
+        "sentry/sentry": "^1.9"
     }
 }
 
