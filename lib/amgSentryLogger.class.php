@@ -7,6 +7,12 @@
  * @copyright AMG Développement | Groupe GPdis
  *
  */
+
+// defeat the autoload race condition when __FILE__ is loaded before amgSentry.class.php
+if (!class_exists('amgSentry')) {
+    require_once 'amgSentry.class.php';
+}
+
 class amgSentryLogger extends sfLogger {
 
 	/**
