@@ -64,16 +64,21 @@ class amgSentry extends Raven_Client
     * Send an exception to Sentry.
     *
     * @param Exception $exception Exception
-    * @param string $description Exception description
+    * @param string $additional_comments Exception additional_comments
     *
     * @return integer Sentry event ID
     */
-    public static function sendException($exception, $description = '')
+    public static function sendException($exception, $additional_comments = '')
     {
         if (!sfConfig::get('app_amg_sentry_enabled', false)) {
             return true;
         }
-        return self::getInstance()->captureException($exception, ['description' => $description]);
+
+        $parameters = [];
+        if (!empty($additional_comments)) {
+            $parameters['extra']['additional_comments'] = $additional_comments;
+        }
+        return self::getInstance()->captureException($exception, $parameters);
     }
 
     /**
