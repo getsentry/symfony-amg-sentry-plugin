@@ -42,20 +42,21 @@ class amgSentry extends Raven_Client
     * Send a message to Sentry.
     *
     * @param string $title Message title
-    * @param string $description Message description
+    * @param string $additional_comments Message additional_comments
     * @param string $level Message level
     *
     * @return integer Sentry event ID
     */
-    public static function sendMessage($title, $description = '', $level = self::INFO)
+    public static function sendMessage($title, $additional_comments = '', $level = self::INFO)
     {
         if (!sfConfig::get('app_amg_sentry_enabled', false)) {
             return true;
         }
-        $parameters = [
-            'description' => $description,
-            'level'       => $level,
-        ];
+
+        $parameters = ['level' => $level];
+        if (!empty($additional_comments)) {
+            $parameters['extra']['additional_comments'] = $additional_comments;
+        }
         return self::getInstance()->captureMessage($title, [], $parameters);
     }
 
