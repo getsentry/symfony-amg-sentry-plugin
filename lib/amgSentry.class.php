@@ -26,10 +26,10 @@ class amgSentry extends Raven_Client
 
             $environment = sfProjectConfiguration::getActive()->isProduction() ? 'production' : 'development';
             $params      = [
-                'release' => sfConfig::get('app_amg_sentry_release'),
-                'tags'    => [
-                    'environment' => $environment,
-                    'instance'    => INSTANCE_BASE_URL,
+                'release'     => sfConfig::get('app_amg_sentry_release'),
+                'environment' => $environment,
+                'tags'        => [
+                    'instance' => INSTANCE_BASE_URL
                 ],
             ];
 
@@ -52,7 +52,11 @@ class amgSentry extends Raven_Client
         if (!sfConfig::get('app_amg_sentry_enabled', false)) {
             return true;
         }
-        return self::getInstance()->captureMessage($title, ['description' => $description], $level);
+        $parameters = [
+            'description' => $description,
+            'level'       => $level,
+        ];
+        return self::getInstance()->captureMessage($title, [], $parameters);
     }
 
     /**
