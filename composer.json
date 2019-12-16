@@ -1,9 +1,9 @@
 {
-    "name": "amg-dev/amg-sentry-plugin",
+    "name": "james-and-james-fulfilment/amg-sentry-plugin",
     "type": "symfony1-plugin",
     "description": "Symfony 1.x plugin for Sentry.",
     "keywords": ["symfony", "logger", "sentry"],
-    "homepage": "https://github.com/amg-dev/symfony-amg-sentry-plugin",
+    "homepage": "https://github.com/JamesAndJamesFulfilment/symfony-amg-sentry-plugin",
     "license": "MIT",
     "authors": [
         {
