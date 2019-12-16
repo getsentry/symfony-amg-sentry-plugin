@@ -18,6 +18,10 @@
     "require": {
         "composer/installers": "*",
         "sentry/sentry": "^1.9"
+    },
+    "support": {
+        "issues": "https://github.com/JamesAndJamesFulfilment/amg-sentry-plugin/issues",
+        "source": "https://github.com/JamesAndJamesFulfilment/amg-sentry-plugin"
     }
 }
 
