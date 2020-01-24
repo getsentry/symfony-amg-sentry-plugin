@@ -20,8 +20,8 @@
         "sentry/sentry": "^1.9"
     },
     "support": {
-        "issues": "https://github.com/JamesAndJamesFulfilment/amg-sentry-plugin/issues",
-        "source": "https://github.com/JamesAndJamesFulfilment/amg-sentry-plugin"
+        "issues": "https://github.com/JamesAndJamesFulfilment/symfony-amg-sentry-plugin/issues",
+        "source": "https://github.com/JamesAndJamesFulfilment/symfony-amg-sentry-plugin"
     }
 }
 
